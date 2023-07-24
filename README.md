@@ -5,11 +5,11 @@ Photosorter use Exif data from pictures and videos to sort and group them based 
 
 #### Installation
 Just clone this repo on your *nix/Mac.
-Install required commandline tools: jq, curl, tr and exiftool
+Install required commandline tools: jq, curl, tr and exiftool.
 
 #### Obtain Radar API key
 
-You need to create account on https://radar.com webiste and obtain free API key. This key looks like `prj_test_pk_.....` or `prj_prod_pk_.....`. This API key need to used to declere variable `RADAR_API_KEY` in Photosorter code:
+You need to create account on https://radar.com webiste and obtain free API key. This key looks like `prj_test_pk_.....` or `prj_prod_pk_.....`. This API key must be used to declere the variable `RADAR_API_KEY` in Photosorter code:
 ```
 RADAR_API_KEY="prj_test_pk_....."
 ```
