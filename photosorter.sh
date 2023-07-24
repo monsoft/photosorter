@@ -12,8 +12,8 @@ Photosorter 1.00 (c) 2023 by Irek 'Monsoft' Pelech
 
 Usage: photosorter <input_dir> <output_dir> [-c]
 
-    input_dir   source pictures and videos directory
-    output_dir  destination pictures and videos directory
+    input_dir   full path to source pictures and videos directory
+    output_dir  full path to destination pictures and videos directory
     -c          copy files instead of symlinking
 HELP
 }
