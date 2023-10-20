@@ -40,7 +40,7 @@ OUT_PIC_DIR=$2
 PIC_COPY=$3
 
 # Radar.com API key
-RADAR_API_KEY=""
+RADAR_API_KEY="prj_test_pk_16c61e5947176c216b421078fe03c2b3665427d1"
 PIC_COUNT=0
 
 if [ -z ${IN_PIC_DIR} ]; then
@@ -53,14 +53,21 @@ if [ -z ${OUT_PIC_DIR} ]; then
     exit 1
 fi
 
-echo -e "\nPhotosorter 1.00 (c) 2023 by Irek 'Monsoft' Pelech" 
+echo -e "\nPhotosorter 1.1 (c) 2023 by Irek 'Monsoft' Pelech" 
 
 for PIC_FILE in $(find ${IN_PIC_DIR} -type f); do
-    file -i $PIC_FILE|egrep "image|video" &>/dev/null
+    FTYPE=$(file -i $PIC_FILE|egrep "image|video"|grep -oP '(?<= ).*?(?=\/)')
     if [ "$?" -ne 0 ]; then
         echo "$PIC_FILE Non image or video file."
         continue
     fi
+
+    if [ $FTYPE == "image" ]; then
+        FILETYPEDIR="Pictures"
+    else
+        FILETYPEDIR="Videos"
+    fi
+
 
     EXIF_DATA=($(exiftool -n -p '$GPSLatitude $GPSLongitude $CreateDate' $PIC_FILE 2> /dev/null))
     if [ ${#EXIF_DATA[@]} -eq 0 ]; then
@@ -81,10 +88,11 @@ for PIC_FILE in $(find ${IN_PIC_DIR} -type f); do
 
     PIC_COUNTRY=$(echo ${RADAR_API_RESPONCE} | jq -r ".addresses[].country"| tr " " "_")
 
+
     echo "$PIC_FILE ..."
 
     if [ "${PIC_COPY}" = "-c" ]; then
-        install -D -m 644 -t ${OUT_PIC_DIR}/${PIC_COUNTRY}/${PIC_YEAR}/${PIC_MONTH}/ -D ${PIC_FILE}
+        install -D -m 644 -t ${OUT_PIC_DIR}/${PIC_COUNTRY}/${PIC_YEAR}/${PIC_MONTH}/${FILETYPEDIR}/ -D ${PIC_FILE}
         let "PIC_COUNT++"
     else 
         if [ ! -d "${OUT_PIC_DIR}" ]; then
@@ -100,9 +108,12 @@ for PIC_FILE in $(find ${IN_PIC_DIR} -type f); do
         fi
          if [ ! -d "${OUT_PIC_DIR}/${PIC_COUNTRY}/${PIC_YEAR}/${PIC_MONTH}" ]; then
             mkdir ${OUT_PIC_DIR}/${PIC_COUNTRY}/${PIC_YEAR}/${PIC_MONTH}
-        fi       
+        fi     
+        if [ ! -d "${OUT_PIC_DIR}/${PIC_COUNTRY}/${PIC_YEAR}/${PIC_MONTH}/${FILETYPEDIR}" ]; then
+            mkdir ${OUT_PIC_DIR}/${PIC_COUNTRY}/${PIC_YEAR}/${PIC_MONTH}/${FILETYPEDIR}
+        fi   
 
-        ln -s ${PIC_FILE} ${OUT_PIC_DIR}/${PIC_COUNTRY}/${PIC_YEAR}/${PIC_MONTH}/ 2> /dev/null
+        ln -s ${PIC_FILE} ${OUT_PIC_DIR}/${PIC_COUNTRY}/${PIC_YEAR}/${PIC_MONTH}/${FILETYPEDIR}/ 2> /dev/null
         let "PIC_COUNT++"
     fi
 done
