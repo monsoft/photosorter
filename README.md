@@ -32,7 +32,7 @@ Running Photosorter:
 $ ./photosorter.sh /pictures /our_pictures
 
 Photosorter 1.00 (c) 2023 by Irek 'Monsoft' Pelech
-/picturesGRFI9881.MP4 file have no EXIF Data
+/pictures/GRFI9881.MP4 file have no EXIF Data
 /pictures/IMG_1163.MOV ...
 /pictures/IMG_5032.JPG ...
 /pictures/test.txt Non image or video file.
